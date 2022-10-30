@@ -43,7 +43,7 @@ def seven_days_forecast(city):
     return fdict
 
 def download_file(bucket_name='ex2-storage', obj_name='sky.jpg', timeout=600):
-    s3_client = boto3.client('s3', aws_access_key_id='AKIA6BRGWXJO7CU6QR7I', aws_secret_access_key='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', config=Config(signature_version='s3v4', region_name='eu-central-1'))
+    s3_client = boto3.client('s3', aws_access_key_id, aws_secret_access_key, config=Config(signature_version='s3v4', region_name='eu-central-1'))
     try:
        response = s3_client.generate_presigned_url('get_object', Params={'Bucket': bucket_name,'Key': obj_name, 'ResponseContentType': 'binart/octet-stream'}, ExpiresIn=timeout)
     except ClientError as e:
@@ -53,7 +53,7 @@ def download_file(bucket_name='ex2-storage', obj_name='sky.jpg', timeout=600):
 
 def save_item2db(res_add, date, day, min, max, humi, time_stamp):
     #time_now = "%s:%s:%s" % (time_stamp.hour+gmt,time_stamp.minute,time_stamp.second)
-    db = boto3.resource('dynamodb', aws_access_key_id='AKIA6BRGWXJO7CU6QR7I', aws_secret_access_key='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', region_name='eu-central-1')
+    db = boto3.resource('dynamodb', aws_access_key_id, aws_secret_access_key, region_name='eu-central-1')
     table = db.Table("weather_db")
     response = table.put_item(Item={'full_address':res_add,'date':date,'weekday':day,'tempmax':max,'tempmin':min,'humidity':humi,'time_stamp':time_stamp}) 
     return response
