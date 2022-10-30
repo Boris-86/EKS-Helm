@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{"Weather App-1"}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <style>
+        body{
+            background: url("https://stormandsky.com/gif/14.gif");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .box{
+            box-shadow: 1px 1px 8px 6px rgba(8, 40, 59, 0.778);
+            border-radius: 15%;
+            background: rgba(255, 255, 255, 0.354);
+        }
+
+        .title{
+            background-image: linear-gradient(to left, #553c9a, #ee4b2b);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            letter-spacing: 0.7vw;
+            text-shadow: 5px 0 white;
+
+        }
+
+        .row{
+            gap: 1rem;
+        }
+
+        strong{
+            margin-right: 0.5rem;
+        }
+
+        .rights{
+           margin-top: auto;
+        }
+
+        .color{
+            color: white;
+        }
+
+
+        
+    </style>
+</head>
+<body>
+    <div id="form" class="container d-flex align-items-center flex-column">
+        <div class="display-5 text-center fw-bold title mb-5 mt-5">7 Days Forecast</div>
+        <form class="container d-flex align-items-center" action= "/" method="GET">
+            <div class="input-group mb-3">
+                <input class="form-control" type="text" name="city" placeholder="City / Country">
+                <button class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search-heart-fill" viewBox="0 0 16 16">
+                        <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
+                      </svg>
+                </button>
+                 
+            </div>
+        </form>
+        <a href="{{image}}" > <button type="button" onclick="alert('Pizdets Nahuy!')">Download Sky Image!</button> </a>
+    </div>
+    {% if city != 'no_city' %}
+    <div class="container d-flex flex-column justify-content-center">
+        {% if resdict['status'] != 200 %}
+                <div class="text-center">
+                    <h1 class="h1 display-5 text-center fw-bold title">{{resdict['message']}}</h1>
+                </div>
+                {% else %}
+        <div class="display-5 text-center mb-3 fw-bold">{{resdict['res_addr']}}</div>
+        <div class="container">
+            <div class="row">
+                <div class="row text-center">
+                    <h1 class="h2">Temperature Now: {{resdict['curr_cond']['temp']}}&#8451</h1>
+                    <h2 class="h2">Humidity Now: {{resdict['curr_cond']['humidity']}} %</h2>
+                </div>
+                {% for date in resdict['days'][0:4] %}
+                <div class="col p-4 box text-center gy-3">
+                    <h3><strong>{{date.weekday}}</strong> </h3>
+                <h4>{{date.datetime}}</h4>
+                <hr>
+                <h5 class="d-flex justify-content-between"><strong>Temperature:</strong> <span>{{date.temp}}&#8451</span></h5>
+                <h5 class="d-flex justify-content-between"><strong>Day Max:</strong> <span>{{date.tempmax}}&#8451</span></h5>
+                <h5 class="d-flex justify-content-between"><strong>Night Min:</strong> <span>{{date.tempmin}}&#8451</span></h5>
+                <h5 class="d-flex justify-content-between"><strong>Humidity:</strong> <span>{{date.humidity}}%</span></h5>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for date in resdict['days'][4:7] %}
+            <div class="col p-4 box gy-3 text-center">
+                <h3><strong>{{date.weekday}}</strong> </h3>
+                <h3>{{date.datetime}}</h3>
+                <hr>
+                <h4 class="d-flex justify-content-between"><strong>Temperature:</strong> <span>{{date.temp}}&#8451</span></h4>
+                <h4 class="d-flex justify-content-between"><strong>Day Max:</strong> <span>{{date.tempmax}}&#8451</span></h4>
+                <h4 class="d-flex justify-content-between"><strong>Night Min:</strong> <span>{{date.tempmin}}&#8451</span></h4>
+                <h4 class="d-flex justify-content-between"><strong>Humidity:</strong> <span>{{date.humidity}}%</span></h4>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+        <p class="h5 rights text-center m-5 color">© All Rigths Reserved to Gulag Team - Maayan, Zviki & Boris</p>
+        </div>
+        
+        <!--  <a href="{{image}}" > <button type="button" onclick="alert('Pizdets!')">Download Sky Image!</button> </a> --> 
+        
+</div>
+</body>
+</html>
