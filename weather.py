@@ -1,3 +1,5 @@
+from typing import List, Any
+import os
 from requests import get
 import json
 from datetime import datetime
@@ -57,6 +59,21 @@ def save_item2db(res_add, date, day, min, max, humi, time_stamp):
     table = db.Table("weather_db")
     response = table.put_item(Item={'full_address':res_add,'date':date,'weekday':day,'tempmax':max,'tempmin':min,'humidity':humi,'time_stamp':time_stamp}) 
     return response
+def save_history(city_history):
+
+    filename = '/home/boris/infy/git_hub/EKS-Helm/history.json'
+    current_date = datetime.now()
+    data = {city_history: datetime.strftime(current_date, "%H:%M, %d-%b-%Y")}
+    db = {"logs": []}
+    if os.path.isfile(filename):
+        with open(filename, "r") as file:
+            temp = json.load(file)
+        temp['logs'].append(data)
+        with open(filename, "r+") as file:
+            json.dump(temp, file, indent = 4)
+    else:
+        with open(filename, "w") as file:
+            json.dump(db, file, indent = 4)
 
 if __name__ == "__main__":
     print(seven_days_forecast('haifa'))
